@@ -44,19 +44,17 @@ namespace Engaze.Core.MessageBroker.Producer
                 };
             }
 
-            timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
+            timer = new Timer(state =>
+            {
+                consumer.Poll(100);
+                logger.LogInformation("Timed Background Service is working.");
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
 
             return Task.CompletedTask;
         }
 
-        private void DoWork(object state)
-        {
-            consumer.Poll(100);
-            logger.LogInformation("Timed Background Service is working.");
-        }
-
         public Task StopAsync(CancellationToken cancellationToken)
-        {           
+        {
             logger.LogInformation("Timed Background Service is stopping.");
 
             timer?.Change(Timeout.Infinite, 0);
