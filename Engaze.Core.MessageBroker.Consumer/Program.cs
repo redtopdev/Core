@@ -5,8 +5,7 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.DependencyInjection;
     using System;
-   
-
+    using Engaze.Core.MessageBroker.Producer;
 
     class Program
     {
@@ -31,9 +30,9 @@
              }).ConfigureServices((hostContext, services) =>
              {
                  services.AddLogging();
-                 services.AddSingleton<EventStreamListener>();
-                 services.AddSingleton<IMessageHandler>();
-                 services.AddHostedService<SubscriberService>();
+                 ////services.AddSingleton<EventStreamListener>();
+                 ////services.AddSingleton<IMessageHandler>();
+                 services.AddHostedService<EventoConsumer>();
 
              })
              .RunConsoleAsync();

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engaze.Core.MessageBroker.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engaze.Core.MessageBroker.Test", "Engaze.Core.MessageBroker.Test\Engaze.Core.MessageBroker.Test.csproj", "{2095F912-933F-4473-B978-03962D6F5A4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engaze.Core.MessageBroker.Consumer", "Engaze.Core.MessageBroker.Consumer\Engaze.Core.MessageBroker.Consumer.csproj", "{7AFBB021-78A5-4386-8706-37D31D4AA428}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engaze.Core.MessageBroker.Consumer", "Engaze.Core.MessageBroker.Consumer\Engaze.Core.MessageBroker.Consumer.csproj", "{7AFBB021-78A5-4386-8706-37D31D4AA428}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
