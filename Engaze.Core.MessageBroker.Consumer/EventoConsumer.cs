@@ -8,21 +8,21 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Engaze.Core.MessageBroker.Producer
+namespace Engaze.Core.MessageBroker.Consumer
 {
-    class EventoConsumer : BackgroundService, IDisposable
+    public class EventoConsumer : BackgroundService, IDisposable
     {
         Dictionary<string, object> kafkaConfig;
         ILogger<EventoConsumer> logger;
         Consumer<Null, string> consumer;
-        Action<string> onMessageReceived;
-        Action<string> onError;
-        public EventoConsumer(ILogger<EventoConsumer> logger, Action<string> onMessageReceived, Action<string> onError)
+        IMessageHandler messageHandler;
+
+        public EventoConsumer(ILogger<EventoConsumer> logger, IMessageHandler messageHandler)
         {
             this.logger = logger;
-            this.onMessageReceived = onMessageReceived;
-            this.onError = onError;
+            this.messageHandler = messageHandler;
         }
+       
         public override void Dispose()
         {
             base.Dispose();
@@ -47,7 +47,7 @@ namespace Engaze.Core.MessageBroker.Producer
             {
                 try
                 {
-                    onMessageReceived(msg.Value);
+                    this.messageHandler.OnMessageReceived(msg.Value);
                 }
                 finally
                 {
@@ -63,7 +63,7 @@ namespace Engaze.Core.MessageBroker.Producer
                 {
                     try
                     {
-                        onError(error.ToString());
+                        this.messageHandler.OnError(error.ToString());
                     }
                     finally
                     {
@@ -94,10 +94,7 @@ namespace Engaze.Core.MessageBroker.Producer
 
             logger.LogInformation("Timed Background Service is stopping.");
 
-
-
             return Task.CompletedTask;
         }
-
     }
 }
