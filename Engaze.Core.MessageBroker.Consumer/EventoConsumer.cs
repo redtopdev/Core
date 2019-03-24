@@ -42,7 +42,7 @@ namespace Engaze.Core.MessageBroker.Consumer
 
             consumer = new Consumer<Null, string>(kafkaConfig, null, new StringDeserializer(Encoding.UTF8));
 
-            consumer.Subscribe(new string[] { "test" });
+            consumer.Subscribe(new string[] { "evento" });
             consumer.OnMessage += (_, msg) =>
             {
                 try
