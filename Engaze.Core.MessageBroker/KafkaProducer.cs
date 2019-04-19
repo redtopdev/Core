@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 using System.Collections.Generic;
@@ -18,14 +19,15 @@ namespace Engaze.Core.MessageBroker
         private KafkaConfiguration kafkaConfiguration;
 
         //private readonly ILogger logger;
-        public KafkaProducer(KafkaConfiguration kafkaConfiguration, ILogger<KafkaProducer<T>> logger)
+        public KafkaProducer(IOptions<KafkaConfiguration> options , ILogger<KafkaProducer<T>> logger)
         {
-            this.kafkaConfiguration = kafkaConfiguration;
+            this.kafkaConfiguration = options.Value;
             this.logger = logger;
 
             this.config = new Dictionary<string, object>
             {
                 { "bootstrap.servers", kafkaConfiguration.BootStrapServers }
+                //{ "bootstrap.servers", "localhost: 9092" }
             };
         }
         public void Write(T message, string topic)
