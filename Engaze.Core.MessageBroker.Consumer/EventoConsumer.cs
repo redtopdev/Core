@@ -2,6 +2,7 @@
 using Confluent.Kafka.Serialization;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,7 +48,10 @@ namespace Engaze.Core.MessageBroker.Consumer
             {
                 try
                 {
-                    this.messageHandler.OnMessageReceived(msg.Value);
+                    //this.messageHandler.OnMessageReceived(Encoding.ASCII.GetString(Convert.FromBase64String(msg.Value)));
+                    this.messageHandler.OnMessageReceived(Encoding.ASCII.GetString(
+                        Convert.FromBase64String(
+                            JsonConvert.DeserializeObject(msg.Value).ToString())));
                 }
                 finally
                 {
