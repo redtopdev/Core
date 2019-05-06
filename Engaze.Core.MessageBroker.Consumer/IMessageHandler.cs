@@ -1,8 +1,10 @@
-﻿namespace Engaze.Core.MessageBroker.Consumer
+﻿using System.Threading.Tasks;
+
+namespace Engaze.Core.MessageBroker.Consumer
 {
     public interface IMessageHandler
     {
-        void OnMessageReceived(string message);
-        void OnError(string error);
+        Task OnMessageReceivedAsync(string message);
+        void  OnError(string error);
     }
 }

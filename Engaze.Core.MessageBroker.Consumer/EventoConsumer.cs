@@ -32,11 +32,10 @@ namespace Engaze.Core.MessageBroker.Consumer
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-
             kafkaConfig = new Dictionary<string, object>
             {
                 { "group.id","test" },
-                { "bootstrap.servers", "localhost:9092" },
+                { "bootstrap.servers", "evento-kafka:9092" },
                 { "enable.auto.commit", "false" }
             };
 
@@ -49,7 +48,7 @@ namespace Engaze.Core.MessageBroker.Consumer
                 try
                 {
                     //this.messageHandler.OnMessageReceived(Encoding.ASCII.GetString(Convert.FromBase64String(msg.Value)));
-                    this.messageHandler.OnMessageReceived(Encoding.ASCII.GetString(
+                    this.messageHandler.OnMessageReceivedAsync(Encoding.ASCII.GetString(
                         Convert.FromBase64String(
                             JsonConvert.DeserializeObject(msg.Value).ToString())));
                 }
@@ -96,7 +95,7 @@ namespace Engaze.Core.MessageBroker.Consumer
                 consumer.Poll(100);
             }
 
-            logger.LogInformation("Timed Background Service is stopping.");
+            logger.LogInformation("Timed Background Service is stopping.");           
 
             return Task.CompletedTask;
         }
