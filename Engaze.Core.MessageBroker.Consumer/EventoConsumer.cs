@@ -18,12 +18,12 @@ namespace Engaze.Core.MessageBroker.Consumer
         Consumer<Null, string> consumer;
         IMessageHandler messageHandler;
 
-        public EventoConsumer(ILogger<EventoConsumer> logger, IMessageHandler messageHandler)
+        public EventoConsumer(ILogger<EventoConsumer> logger, IMessageHandler messageHandler, Dictionary<string,string> kafkaConfig)
         {
             this.logger = logger;
             this.messageHandler = messageHandler;
         }
-       
+
         public override void Dispose()
         {
             base.Dispose();
@@ -90,12 +90,15 @@ namespace Engaze.Core.MessageBroker.Consumer
                 => logger.LogInformation($"Statistics: {json}");
 
 
+            logger.LogInformation("Kafka listener started.");
+            Console.WriteLine("Kafka listener started.");
             while (!stoppingToken.IsCancellationRequested)
             {
                 consumer.Poll(100);
             }
 
-            logger.LogInformation("Timed Background Service is stopping.");           
+            Console.WriteLine("Kafka listener stopped.");
+            logger.LogInformation("Kafka listener stopped.");
 
             return Task.CompletedTask;
         }

@@ -1,4 +1,4 @@
-﻿namespace Engaze.Core.MessageBroker
+﻿namespace Engaze.Core.Common
 {
     public class KafkaConfiguration
     {

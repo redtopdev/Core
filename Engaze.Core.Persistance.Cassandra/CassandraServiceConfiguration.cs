@@ -5,7 +5,7 @@ namespace Engaze.Core.Persistance.Cassandra
 {
     public class CassandraServiceConfiguration
     {
-        public void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
             CassandraConfiguration  cassandraConfig= new CassandraConfiguration(null);
             var cluster = Cluster.Builder()
