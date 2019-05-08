@@ -46,7 +46,6 @@ namespace Engaze.Core.MessageBroker
             {
                 return await producer.ProduceAsync(topic, null, JsonConvert.SerializeObject(message));
             }
-
         }
     }
 }

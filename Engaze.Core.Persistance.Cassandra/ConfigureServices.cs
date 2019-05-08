@@ -1,13 +1,18 @@
 ﻿using Cassandra;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Engaze.Core.Persistance.Cassandra
 {
-    public class CassandraServiceConfiguration
+    public static class ConfigureServices
     {
-        public static void ConfigureServices(IServiceCollection services)
+        public static void ConfigureCassandraServices(this IServiceCollection services, IConfiguration config)
         {
-            CassandraConfiguration  cassandraConfig= new CassandraConfiguration(null);
+            services.Configure<CassandraConfiguration>(config.GetSection("CassandraConfiguration"));            
+            var options = services.BuildServiceProvider().GetService<IOptions<CassandraConfiguration>>();
+
+            CassandraConfiguration cassandraConfig = options.Value;
             var cluster = Cluster.Builder()
                 .AddContactPoint(cassandraConfig.ContactPoint)
                 .WithPort(cassandraConfig.Port)
@@ -16,6 +21,7 @@ namespace Engaze.Core.Persistance.Cassandra
             CassandraSessionCacheManager cassandraSessionCacheManager = new CassandraSessionCacheManager(cluster);
             services.AddSingleton(cluster.GetType(), cluster);
             services.AddSingleton(cassandraSessionCacheManager.GetType(), cassandraSessionCacheManager);
+
         }
     }
 }

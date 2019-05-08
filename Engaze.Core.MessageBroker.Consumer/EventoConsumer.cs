@@ -1,7 +1,9 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
+using Engaze.Core.Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,10 +20,17 @@ namespace Engaze.Core.MessageBroker.Consumer
         Consumer<Null, string> consumer;
         IMessageHandler messageHandler;
 
-        public EventoConsumer(ILogger<EventoConsumer> logger, IMessageHandler messageHandler, Dictionary<string,string> kafkaConfig)
+        public EventoConsumer(ILogger<EventoConsumer> logger, IMessageHandler messageHandler, IOptions<KafkaConfiguration> options)
         {
             this.logger = logger;
             this.messageHandler = messageHandler;
+
+            kafkaConfig = new Dictionary<string, object>
+            {
+                { "group.id","test" },
+                { "bootstrap.servers", options.Value.BootStrapServers },
+                { "enable.auto.commit", "false" }
+            };
         }
 
         public override void Dispose()
@@ -32,16 +41,7 @@ namespace Engaze.Core.MessageBroker.Consumer
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            kafkaConfig = new Dictionary<string, object>
-            {
-                { "group.id","test" },
-                { "bootstrap.servers", "evento-kafka:9092" },
-                { "enable.auto.commit", "false" }
-            };
-
-
             consumer = new Consumer<Null, string>(kafkaConfig, null, new StringDeserializer(Encoding.UTF8));
-
             consumer.Subscribe(new string[] { "evento" });
             consumer.OnMessage += (_, msg) =>
             {
