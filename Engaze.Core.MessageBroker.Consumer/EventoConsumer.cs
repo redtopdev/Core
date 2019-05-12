@@ -15,20 +15,21 @@ namespace Engaze.Core.MessageBroker.Consumer
 {
     public class EventoConsumer : BackgroundService, IDisposable
     {
-        Dictionary<string, object> kafkaConfig;
+        Dictionary<string, object> kafkaConfigDict;
         ILogger<EventoConsumer> logger;
         Consumer<Null, string> consumer;
         IMessageHandler messageHandler;
 
-        public EventoConsumer(ILogger<EventoConsumer> logger, IMessageHandler messageHandler, IOptions<KafkaConfiguration> options)
+        public EventoConsumer(ILogger<EventoConsumer> logger, KafkaConfiguration kafkaConfig, IMessageHandler messageHandler)
         {
+          
             this.logger = logger;
             this.messageHandler = messageHandler;
 
-            kafkaConfig = new Dictionary<string, object>
+            kafkaConfigDict = new Dictionary<string, object>
             {
                 { "group.id","test" },
-                { "bootstrap.servers", options.Value.BootStrapServers },
+                { "bootstrap.servers", kafkaConfig.BootStrapServers },
                 { "enable.auto.commit", "false" }
             };
         }
@@ -41,7 +42,7 @@ namespace Engaze.Core.MessageBroker.Consumer
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            consumer = new Consumer<Null, string>(kafkaConfig, null, new StringDeserializer(Encoding.UTF8));
+            consumer = new Consumer<Null, string>(kafkaConfigDict, null, new StringDeserializer(Encoding.UTF8));
             consumer.Subscribe(new string[] { "evento" });
             consumer.OnMessage += (_, msg) =>
             {

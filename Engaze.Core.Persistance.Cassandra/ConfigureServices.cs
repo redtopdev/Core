@@ -21,7 +21,7 @@ namespace Engaze.Core.Persistance.Cassandra
             CassandraSessionCacheManager cassandraSessionCacheManager = new CassandraSessionCacheManager(cluster);
             services.AddSingleton(cluster.GetType(), cluster);
             services.AddSingleton(cassandraSessionCacheManager.GetType(), cassandraSessionCacheManager);
-
+            services.AddSingleton(cassandraConfig.GetType(), cassandraConfig);
         }
     }
 }

@@ -7,10 +7,10 @@ namespace Engaze.Core.MessageBroker.Consumer
 {
     public static class ConfigureServices
     {
-        public static void ConfigureConsumerService(this IServiceCollection services, IConfiguration config, Type IMessageHandlerType)
+        public static void ConfigureConsumerService(this IServiceCollection services, IConfiguration config, IMessageHandler messageHandler)
         {
             services.ConfigureKafkaService(config);
-            services.AddSingleton(typeof(IMessageHandler), IMessageHandlerType);
+            services.AddSingleton(typeof(IMessageHandler), messageHandler);
         }
     }
 }
