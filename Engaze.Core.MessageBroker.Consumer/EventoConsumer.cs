@@ -22,13 +22,13 @@ namespace Engaze.Core.MessageBroker.Consumer
 
         public EventoConsumer(ILogger<EventoConsumer> logger, KafkaConfiguration kafkaConfig, IMessageHandler messageHandler)
         {
-          
+
             this.logger = logger;
             this.messageHandler = messageHandler;
 
             kafkaConfigDict = new Dictionary<string, object>
             {
-                { "group.id","test" },
+                { "group.id",kafkaConfig.GroupId },
                 { "bootstrap.servers", kafkaConfig.BootStrapServers },
                 { "enable.auto.commit", "false" }
             };
