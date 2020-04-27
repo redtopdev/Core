@@ -2,11 +2,11 @@
 {
     public enum OccuredEventType
     {
-        EventCreated = 1,
-        EventDeleted,
-        EventStarted,
-        EventEnded,
-        EventExtended,
+        EventoCreated = 1,
+        EventoDeleted,
+        EventoStarted,
+        EventoEnded,
+        EventoExtended,
         ParticipantLeft,
         ParticipantsListUpdated,
         ParticipantStateUpdated,
