@@ -43,7 +43,7 @@ namespace Engaze.Core.Web
 
             ConfigureComponent(app);
 
-            RemoteConfiguration.Initialize(this.Configuration);            
+            RemoteConfiguration.Initialize(this.Configuration, true);            
         }
         public abstract void ConfigureComponentServices(IServiceCollection services);
 
