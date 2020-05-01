@@ -3,6 +3,7 @@
     public enum OccuredEventType
     {
         EventoCreated = 1,
+        EventoUpdated,
         EventoDeleted,
         EventoStarted,
         EventoEnded,
@@ -10,5 +11,8 @@
         ParticipantLeft,
         ParticipantsListUpdated,
         ParticipantStateUpdated,
+        ParticipantAdded,
+        ParticipantRemoved,
+        DestinationUpdated
     }
 }
