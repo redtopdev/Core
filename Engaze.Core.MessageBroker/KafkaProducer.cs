@@ -1,50 +1,50 @@
 ﻿using Confluent.Kafka;
-using Confluent.Kafka.Serialization;
 using Engaze.Core.Common;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Engaze.Core.MessageBroker
 {
     public class KafkaProducer<T> : IMessageProducer<T> where T : class
     {
-        private readonly Dictionary<string, object> config;
+        private readonly ProducerConfig config;
 
 
         private ILogger<KafkaProducer<T>> logger;
         private KafkaConfiguration kafkaConfiguration;
 
         //private readonly ILogger logger;
-        public KafkaProducer(IOptions<KafkaConfiguration> options , ILogger<KafkaProducer<T>> logger)
+        public KafkaProducer(IOptions<KafkaConfiguration> options, ILogger<KafkaProducer<T>> logger)
         {
             this.kafkaConfiguration = options.Value;
             this.logger = logger;
 
-            this.config = new Dictionary<string, object>
+            this.config = new ProducerConfig
             {
-                { "bootstrap.servers", kafkaConfiguration.BootStrapServers }
-                //{ "bootstrap.servers", "localhost: 9092" }
+                BootstrapServers = kafkaConfiguration.BootStrapServers,
+                SaslMechanism = SaslMechanism.Plain,
+                SecurityProtocol = SecurityProtocol.SaslSsl,
+                SaslUsername = kafkaConfiguration.SaslUsername,
+                SaslPassword = kafkaConfiguration.SaslPassword
             };
         }
         public void Write(T message, string topic)
         {
-            using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
+            using (var producer = new ProducerBuilder<Null, string>(this.config).Build())
             {
-                var dr = producer.ProduceAsync(topic, null, JsonConvert.SerializeObject(message)).Result;
+                var dr = producer.ProduceAsync(topic, new Message<Null, string> { Value = JsonConvert.SerializeObject(message) }).Result;
                 logger.LogInformation($"Delivered '{dr.Value}' to: {dr.TopicPartitionOffset}");
             }
         }
 
-        public async Task<Message<Null, string>> WriteAsync(T message, string topic)
+        public async Task<DeliveryResult<Null, string>> WriteAsync(T message, string topic)
         {
-            using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
+            using (var producer = new ProducerBuilder<Null, string>(this.config).Build())
             {
-                return await producer.ProduceAsync(topic, null, JsonConvert.SerializeObject(message));
+                return await producer.ProduceAsync(topic, new Message<Null, string> { Value = JsonConvert.SerializeObject(message) });
+               
             }
         }
     }

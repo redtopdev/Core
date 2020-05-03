@@ -25,6 +25,7 @@ namespace Engaze.Core.Web
             }
            catch(Exception ex)
             {
+                Console.WriteLine(ex.ToString());//temporarly
                 logger.LogError(ex.ToString(), null);
                 httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await httpContext.Response.WriteAsync("Currently unable to process the request due to internal exception. Please try after some time");
