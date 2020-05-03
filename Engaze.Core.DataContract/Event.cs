@@ -26,7 +26,7 @@ namespace Engaze.Core.DataContract
 
         public EventState EventState { get; set; }
 
-        public IEnumerable<Guid> Participants { get; set; }
+        public IEnumerable<Participant> Participants { get; set; }
 
         public Location Destination { get; set; }
 
