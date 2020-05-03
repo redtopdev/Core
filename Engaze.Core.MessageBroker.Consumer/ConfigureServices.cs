@@ -1,7 +1,6 @@
 ﻿using Engaze.Core.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace Engaze.Core.MessageBroker.Consumer
 {

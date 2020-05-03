@@ -5,7 +5,7 @@
         public string Topic { get; set; }
         public string BootStrapServers { get; set; }
 
-        public int GroupId { get; set; } = 100;
+        public int ConsumerGroupId { get; set; } = 100;
 
         public string SaslMechanism { get; set; }
 
