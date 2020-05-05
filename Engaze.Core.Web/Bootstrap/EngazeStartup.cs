@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace Engaze.Core.Web
 {
@@ -37,6 +38,7 @@ namespace Engaze.Core.Web
                 endpoints.MapControllers();
             });
 
+            app.UseSerilogRequestLogging();
 
             ConfigureComponent(app);
 

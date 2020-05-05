@@ -5,6 +5,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Engaze.Core.Web
 {
@@ -42,7 +43,9 @@ namespace Engaze.Core.Web
         /// <returns>web host.</returns>
         private static IWebHost BuildWebHost<T>(string[] args) where T : class
         {
-            var baseRoot = Directory.GetCurrentDirectory();
+            var baseRoot = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+            Directory.SetCurrentDirectory(baseRoot); 
 
             if (IsServiceMode(args))
             {
@@ -96,7 +99,7 @@ namespace Engaze.Core.Web
             }
             finally
             {
-                Log.CloseAndFlush();
+                ////Log.CloseAndFlush();
             }
         }
     }
