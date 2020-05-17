@@ -58,9 +58,8 @@ namespace Engaze.Core.Web
            .AddJsonFile("appsettings.json", optional: true)
            .AddEnvironmentVariables()
            .Build();
-
-
-            var url = config["ASPNETCORE_URLS"] ?? "http://*:5000";
+         
+            var url =  $"http://*:{config["ServicePort"]}";
             var env = config["ASPNETCORE_ENVIRONMENT"] ?? "Development";
 
             Log.Logger = new LoggerConfiguration()
