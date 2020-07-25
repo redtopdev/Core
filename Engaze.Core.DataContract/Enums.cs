@@ -16,7 +16,7 @@ namespace Engaze.Core.DataContract
         COMPLETED
     }
 
-    public enum EventAcceptanceState
+    public enum EventAcceptanceStatus
     {
         Pending = -1,
         Rejected = 0,

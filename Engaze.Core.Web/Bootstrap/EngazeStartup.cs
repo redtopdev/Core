@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Text.Json.Serialization;
 
 namespace Engaze.Core.Web
 {
@@ -18,7 +19,11 @@ namespace Engaze.Core.Web
         public virtual void ConfigureServices(IServiceCollection services)
         {
             //services.AddMvcCore().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            }); 
+
             ConfigureComponentServices(services);
         }
 
@@ -26,10 +31,11 @@ namespace Engaze.Core.Web
         public virtual void Configure(IApplicationBuilder app)
         {           
 
-            app.UseRouting();
-
+            app.UseRouting();            
             //app.UseAuthorization();
-
+            app.UseCorrelationHeader();
+            app.UseRequestResponseLogging();
+            app.UseSerilogRequestLogging();
             app.UseAppException();
             app.UseAppStatus();
 
@@ -37,8 +43,6 @@ namespace Engaze.Core.Web
             {
                 endpoints.MapControllers();
             });
-
-            app.UseSerilogRequestLogging();
 
             ConfigureComponent(app);
 
